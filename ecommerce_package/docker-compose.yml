@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  ecommerce-app:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src/database:/app/src/database
+    environment:
+      - FLASK_ENV=production
+      - FLASK_APP=src.main
+    restart: unless-stopped
+
+  # Para desenvolvimento separado (opcional)
+  ecommerce-dev:
+    build: .
+    ports:
+      - "5001:5000"
+    volumes:
+      - .:/app
+      - ./src/database:/app/src/database
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    command: python src/main.py
+    profiles:
+      - dev
